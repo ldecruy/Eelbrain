@@ -1,0 +1,57 @@
+# Environment for development
+# usage: $ conda env create --file=env-dev.yml
+# to run stats test, install r-ez with $ conda install -c ncil r-ez --no-deps
+name: eeldev
+channels:
+- conda-forge
+dependencies:
+- python == 3.7  # traitsui incompatible with 3.8
+- pip
+- twine
+- libblas=*=*mkl  # openblas produces incorrect results for ICA in iMac Pro
+- libcblas
+- libclang
+- numpy
+- scipy >= 1.3
+- matplotlib-base >= 3.2.2  # https://github.com/matplotlib/matplotlib/issues/15410
+- pyarrow
+- pillow
+- psutil
+# mne-python
+- mne >= 0.17
+- h5py
+- pandas
+- scikit-learn
+- statsmodels
+- joblib
+# Eelbrain additions
+- ipdb
+- ipython
+- colormath >= 2.1
+- tqdm >= 4.19
+- keyring >= 5
+- wxpython >= 4.0.3
+# building
+- setuptools >= 17
+- cython
+# docs
+- sphinx
+- sphinx-autodoc-typehints
+- sphinx-gallery
+- sphinx_rtd_theme
+- sphinxcontrib-bibtex
+- pydocstyle
+# testing
+- flake8
+- pytest
+- pytest-cov
+- pytest-faulthandler
+#- pytest-sugar  # errors on Linux
+# plotting brains
+- nibabel >= 2.5
+- mayavi >= 4.6.2  # conda-forge pinning faulty
+- vtk >= 8.1.1
+- pysurfer >= 0.9
+- nilearn
+- pip:
+  - scanpydoc

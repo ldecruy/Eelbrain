@@ -7,16 +7,16 @@ matrix:
     - os: osx  # https://github.com/travis-ci/travis-ci/issues/2312
       python: 3.7
       sudo: false
-      env: CONDA_OS="MacOSX" KMP_DUPLICATE_LIB_OK=TRUE CC=g++ CXX=g++
+      env: CONDA_OS="MacOSX" CONDA_ENV=env-dev-no-r.yml KMP_DUPLICATE_LIB_OK=TRUE CC=g++ CXX=g++
     - os: linux
       python: 3.7
       sudo: false
-      env: CONDA_OS="Linux"
+      env: CONDA_OS="Linux" CONDA_ENV=env-dev.yml
       addons: {apt: {packages: [libwebkitgtk-dev]}}
     - os: linux
       python: 3.8
       sudo: false
-      env: CONDA_OS="Linux"
+      env: CONDA_OS="Linux" CONDA_ENV=env-dev.yml
       addons: {apt: {packages: [libwebkitgtk-dev]}}
 
 # Setup anaconda
@@ -30,7 +30,7 @@ before_install:
   - ./miniconda.sh -b -p $HOME/miniconda
   - export PATH=$HOME/miniconda/bin:$PATH
   - conda update --yes -n base conda
-  - conda env create -n condaenv --file env-dev.yml
+  - conda env create -n condaenv --file $(CONDA_ENV)
   - . $HOME/miniconda/etc/profile.d/conda.sh
   - conda activate condaenv
   - python -c "import mne; mne.datasets.testing.data_path()"
