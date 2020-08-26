@@ -20,8 +20,6 @@ from eelbrain import MneExperiment
 
 class SampleExperiment(MneExperiment):
 
-    owner = "me@nyu.edu"
-
     meg_system = 'neuromag306mag'
 
     sessions = 'sample'

@@ -21,8 +21,6 @@ ROOT = "~/Data/SampleExperimentSessions"
 
 class SampleExperiment(MneExperiment):
 
-    owner = "me@nyu.edu"
-
     meg_system = 'neuromag306mag'
 
     sessions = ('sample1', 'sample2')
