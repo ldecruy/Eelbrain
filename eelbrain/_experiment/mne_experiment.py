@@ -1347,6 +1347,17 @@ class MneExperiment(FileTree):
         "Iterate state through subjects and yield each subject name."
         return self.iter()
 
+    def _cleanup_cache(self):
+        """Remove empty directories
+
+        Notes
+        -----
+        Could be problematic if expecting eelfarm results.
+        """
+        for dirpath, dirnames, filenames in os.walk(self.get('cache-dir'), topdown=False):
+            if len(dirnames) + len(filenames) == 0:
+                os.rmdir(dirpath)
+
     # mtime methods
     # -------------
     # _mtime() functions return the time at which any input files affecting the
