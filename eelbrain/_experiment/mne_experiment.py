@@ -66,13 +66,14 @@ from .variable_def import GroupVar, Variables
 
 
 # current cache state version
-CACHE_STATE_VERSION = 14
+CACHE_STATE_VERSION = 15
 # History:
 #  10:  input_state: share forward-solutions between sessions
 #  11:  add samplingrate to epochs
 #  12:  store test-vars as Variables object
 #  13:  store cell in evoked files
 #  14:  avoid directories ending in spaces and double spaces in names
+#  15:  merge_triggers attribute, store in input_state
 
 # paths
 LOG_FILE = join('{root}', 'eelbrain {name}.log')
@@ -238,6 +239,8 @@ class MneExperiment(FileTree):
     # Raw preprocessing pipeline
     raw = {}
 
+    # merge adjacent events in the stimulus channel
+    merge_triggers = None
     # add this value to all trigger times
     trigger_shift = 0
 
@@ -768,6 +771,8 @@ class MneExperiment(FileTree):
             input_state = load.unpickle(input_state_file)
             if input_state['version'] < 10:
                 input_state = None
+            elif input_state['version'] < 15:
+                input_state['merge_triggers'] = None
             elif input_state['version'] > CACHE_STATE_VERSION:
                 raise RuntimeError("You are trying to initialize an experiment with an older version of Eelbrain than that which wrote the cache. If you really need this, delete the eelbrain-cache folder and try again.")
         else:
@@ -778,7 +783,11 @@ class MneExperiment(FileTree):
                 'version': CACHE_STATE_VERSION,
                 'raw-mtimes': {},
                 'fwd-sessions': {s: {} for s in subjects},
+                'merge_triggers': self.merge_triggers,
             }
+        elif input_state['merge_triggers'] != self.merge_triggers:
+            self._log.warning(f"  merge_triggers changed: %s -> %s, reloading events", input_state['merge_triggers'], self.merge_triggers)
+            self.rm('event-file', inclusive=True, confirm=True)
 
         # collect raw input info
         raw_mtimes = input_state['raw-mtimes']
@@ -888,6 +897,7 @@ class MneExperiment(FileTree):
         # =====================================
         save_state = new_state = {
             'version': CACHE_STATE_VERSION,
+            'merge_triggers': self.merge_triggers,
             'raw': {k: v.as_dict() for k, v in self._raw.items()},
             'groups': self._groups,
             'epochs': {k: v.as_dict() for k, v in self._epochs.items()},
@@ -2548,7 +2558,7 @@ class MneExperiment(FileTree):
         if ds is None:
             self._log.debug("Extracting events for %s %s %s", self.get('raw'), subject, self.get('recording'))
             raw = self.load_raw(add_bads)
-            ds = load.fiff.events(raw)
+            ds = load.fiff.events(raw, self.merge_triggers)
             del ds.info['raw']
             ds.info['sfreq'] = raw.info['sfreq']
             ds.info['raw-mtime'] = raw_mtime

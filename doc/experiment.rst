@@ -368,6 +368,10 @@ earlier, the :attr:`MneExperiment.meg_system` attribute needs to specify the
 system the data were collected with. For data from NYU New York, the
 correct value is ``meg_system="KIT-157"``.
 
+.. py:attribute:: MneExperiment.merge_events
+
+Use a non-default ``merge`` parameter for :func:`load.fiff.events`.
+
 .. py:attribute:: MneExperiment.trigger_shift
 
 Set this attribute to shift all trigger times by a constant (in seconds). For
