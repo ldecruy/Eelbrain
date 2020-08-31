@@ -1420,10 +1420,7 @@ class FileTree(TreeModel):
         for stemp in self._secondary_cache[temp]:
             secondary_files.extend(self.glob(stemp, inclusive, **constants))
 
-        options = {'yes': 'delete files', 'no': "don't delete files (default)"}
         if files or secondary_files:
-            print("root: %s\n" % self.get('root'))
-            print('\n'.join(self._remove_root(files)))
             is_dir = [os.path.isdir(path) for path in files]
             # Confirm deletion
             if not confirm:
@@ -1444,9 +1441,18 @@ class FileTree(TreeModel):
                 if n_unsafe:
                     info += f"\n!\n! {plural('item', n_unsafe)} outside of {self._safe_delete}\n!"
 
-                if ask(info, options, allow_empty=True) != 'yes':
-                    print('aborting...')
-                    return
+                # prompt
+                while not confirm:
+                    command = ask(info, {'yes': 'delete files', 'no': "don't delete files (default)", 'show': 'list the files'}, allow_empty=True)
+                    if command == 'yes':
+                        confirm = True
+                    elif command == 'show':
+                        print("root: %s\n" % self.get('root'))
+                        print('\n'.join(self._remove_root(files)))
+                    elif command in ('no', ''):
+                        return
+                    else:
+                        raise RuntimeError(f"command={command!r}")
 
             print('deleting...')
             dirs = (p for p, isdir in zip(files, is_dir) if isdir)
