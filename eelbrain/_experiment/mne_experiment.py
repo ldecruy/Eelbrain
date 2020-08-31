@@ -1916,6 +1916,31 @@ class MneExperiment(FileTree):
                         if ds[i, 'trigger'] == 2 and ds[i-1, 'trigger'] == 1:
                             ds[i, 'new'] = 'yes'
                     return ds
+
+        Add events based on separate files. This assumes that the events in
+        the recording only indicate trial onsets, and separate files contain
+        events listed relative to these trial onsets::
+
+            class Experiment(MneExperiment):
+
+                def label_events(self, ds):
+                    samplingrate = ds.info['sfreq']
+                    new_events = []
+                    # loop through trials
+                    for i_start, trigger in ds.zip('i_start', 'trigger'):
+                        # load the event file, assuming that the trigger in the
+                        # data was used to indicate the trial ID
+                        trial_events = load.tsv(f'/files/trial_{trigger}.txt')
+                        # assuming trial_events has a column called 'time' (in
+                        # seconds), we infer the event's sample in the raw file
+                        trial_i_start = i_start + trial_events['time'] * samplingrate
+                        trial_events['i_start'] = Var(trial_i_start.astype(int))
+                        # events also need a trigger column
+                        trial_events[:, 'trigger'] = trigger
+                        # collect all trials
+                        new_events.append(trial_events)
+                    # combine the trials to a single dataset
+                    return combine(new_events)
         """
         return ds
 
