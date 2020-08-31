@@ -127,11 +127,17 @@ def events(raw=None, merge=None, proj=False, name=None, bads=None,
         The raw fiff file from which to extract events (if raw and events are
         both ``None``, a file dialog will be displayed to select a raw file).
     merge : int
-        Merge steps occurring in neighboring samples. The integer value
-        indicates over how many samples events should be merged, and the sign
-        indicates in which direction they should be merged (negative means
-        towards the earlier event, positive towards the later event). By
-        default, this parameter is inferred from the data.
+        Merge stimulus channel steps occurring in neighboring samples.
+        The integer value indicates across how many samples events should
+        be merged, and the sign indicates in which direction they should be
+        merged (negative means towards the earlier event, positive towards
+        the later event). By default, this parameter is based on the data:
+        -1 for KIT data, 0 otherwise.
+        The main reason for merging events is an artifact from analog event
+        recording systems. If events are recorded in an analog channel,
+        event onsets can be blurred (what should be ``0, 0, 0, 1, 1, 1, ...``,
+        can look like ``0, 0, 0, 0.5, 1, 1, ...``; ``merge=-1`` would
+        turn the latter into the former).
     proj : bool | str
         Path to the projections file that will be loaded with the raw file.
         ``'{raw}'`` will be expanded to the raw file's path minus extension.
@@ -197,11 +203,11 @@ def events(raw=None, merge=None, proj=False, name=None, bads=None,
         else:
             raw.load_data()
             if merge is None:
-                evts = mne.find_stim_steps(raw, merge=-1, stim_channel=stim_channel)
-                if len(evts) == 0:
-                    evts = mne.find_stim_steps(raw, merge=0, stim_channel=stim_channel)
-            else:
-                evts = mne.find_stim_steps(raw, merge=merge, stim_channel=stim_channel)
+                if 'kit_system_id' in raw.info:
+                    merge = -1
+                else:
+                    merge = 0
+            evts = mne.find_stim_steps(raw, merge=merge, stim_channel=stim_channel)
             evts = evts[np.flatnonzero(evts[:, 2])]
     else:
         evts = mne.read_events(events)

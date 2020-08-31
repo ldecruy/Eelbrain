@@ -3,6 +3,12 @@ Changes
 
 .. currentmodule:: eelbrain
 
+New in 0.33
+-----------
+
+* API :func:`load.fiff.events`:  The merge parameter is now by default inferred based on the raw data
+
+
 New in 0.32
 -----------
 
