@@ -1026,19 +1026,25 @@ def shuffled_index(n, cells=None):
     return out
 
 
-def combine(items, name=None, check_dims=True, incomplete='raise', dim_intersection=False):
+def combine(
+        items: Iterable,
+        name: str = None,
+        check_dims: bool = True,
+        incomplete: str = 'raise',
+        dim_intersection: bool = False,
+):
     """Combine a list of items of the same type into one item.
 
     Parameters
     ----------
-    items : sequence
+    items
         Sequence of data objects to combine (Dataset, Var, Factor, 
         NDVar or Datalist). A sequence of numbers is converted to :class:`Var`, 
         a sequence of strings is converted to :class:`Factor`.
-    name : None | str
+    name
         Name for the resulting data-object. If None, the name of the combined
         item is the common prefix of all items.
-    check_dims : bool
+    check_dims
         For :class:`NDVar` columns, check dimensions for consistency between
         items (e.g., channel locations in a :class:`Sensor`). Default is
         ``True``. Set to ``False`` to ignore mismatches.
@@ -1049,7 +1055,7 @@ def combine(items, name=None, check_dims=True, incomplete='raise', dim_intersect
         variables. With ``"fill in"``, retain partially missing variables and
         fill in missing values with empty values (``""`` for factors, ``NaN``
         for numerical variables).
-    dim_intersection : bool
+    dim_intersection
         Only applies to combining :class:`NDVar`: normally, when :class:`NDVar`
         have mismatching dimensions, a DimensionMismatchError is raised. With
         ``dim_intersection``, the intersection is used instead.
@@ -1065,10 +1071,10 @@ def combine(items, name=None, check_dims=True, incomplete='raise', dim_intersect
         raise ValueError("incomplete=%s" % repr(incomplete))
 
     # check input
-    if isinstance(items, Iterator):
+    if not isinstance(items, Sequence):
         items = list(items)
     if len(items) == 0:
-        raise ValueError("combine() called with empty sequence %s" % repr(items))
+        raise ValueError(f"combine() called with empty sequence {items!r}")
 
     # find type
     first_item = items[0]
