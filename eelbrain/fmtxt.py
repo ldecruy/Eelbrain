@@ -986,7 +986,7 @@ class List(FMTextElement):
     def __init__(
             self,
             head: FMTextLike = None,
-            items: Iterable[FMTextLike] = None,
+            items: Iterable[FMTextLike] = (),
             ordered: bool = False,
     ):
         """Bulletted list of FMText elements
@@ -1003,10 +1003,7 @@ class List(FMTextElement):
         """
         self.ordered = ordered
         self.head = asfmtext_or_none(head)
-        if items is None:
-            self.items = []
-        else:
-            self.items = list(map(asfmtext, items))
+        self.items = [asfmtext(item) for item in items]
 
     def _repr_items(self):
         if self.ordered:
@@ -1891,7 +1888,7 @@ class Figure(FMText):
         options : dict
             HTML options for ``<figure>`` tag.
         """
-        self._caption = asfmtext(caption)
+        self._caption = asfmtext_or_none(caption)
         FMText.__init__(self, content, None, options)
 
     def get_html(self, env: dict = ENV):
