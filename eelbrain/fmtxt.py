@@ -1910,6 +1910,28 @@ class Figure(FMText):
             return body + '\n'
 
 
+class FloatingLayout(FMText):
+    "Arrange contents as floating elements"
+
+    def __init__(self, content: FMTextLike):
+        FMText.__init__(self, content)
+        self._options = {
+            'display': 'inline-block',
+            'margin': '10px',
+        }
+
+    def get_html(self, env):
+        options = (f"{key}: {value};" for key, value in self._options)
+        header = '\n'.join((
+            "<style> .floating-box {",
+            *options,
+            "} </style>",
+        ))
+        items = (item.get_html(env) for item in self.content)
+        items = (f'<div class="floating-box">\n{item}\n</div>' for item in items)
+        return '\n\n'.join((header, *items))
+
+
 class Section(FMText):
     """Document section containing a title and content
 
