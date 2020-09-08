@@ -1918,7 +1918,7 @@ class FloatingLayout(FMText):
         }
 
     def get_html(self, env):
-        options = (f"{key}: {value};" for key, value in self._options)
+        options = (f"{key}: {value};" for key, value in self._options.items())
         header = '\n'.join((
             "<style> .floating-box {",
             *options,
