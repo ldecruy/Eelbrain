@@ -1022,7 +1022,7 @@ class List(FMTextElement):
     def add_sublist(
             self,
             head: FMTextLike = None,
-            items: Iterable[FMTextLike] = None,
+            items: Iterable[FMTextLike] = (),
             ordered: bool = False,
     ):
         """Add an item with a subordinate list
