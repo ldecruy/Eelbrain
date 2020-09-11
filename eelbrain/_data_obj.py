@@ -10410,10 +10410,9 @@ class UTS(Dimension):
             i = (arg - self.tmin) / self.tstep
             if not fraction:
                 i = int(round(i))
-            if 0 <= i < self.nsamples:
-                return i
-            else:
+            if i < 0:
                 raise ValueError(f"Time index {arg} out of range ({self.tmin}, {self.tmax})")
+            return i
         elif fraction:
             raise NotImplementedError
         elif isinstance(arg, UTS):

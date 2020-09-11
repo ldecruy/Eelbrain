@@ -657,8 +657,12 @@ def test_dim_uts():
     uts = UTS(-0.1, 0.005, 301)
 
     # basic indexing
-    with pytest.raises(ValueError):
-        uts._array_index(1.5)
+    assert uts._array_index(-0.101) == 0
+    assert uts._array_index(-0.1) == 0
+    assert uts._array_index(-0.099) == 0
+    assert uts._array_index(0) == 20
+    assert uts._array_index(1.4) == 300
+    assert uts._array_index(1.405) == 301
     with pytest.raises(ValueError):
         uts._array_index(-.15)
 
