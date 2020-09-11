@@ -467,6 +467,9 @@ def dss(ndvar) -> (NDVar, NDVar):
 
 
 def erode(ndvar, dim):
+    dim_obj = ndvar.get_dim(dim)
+    if dim_obj._connectivity_type != 'grid':
+        raise NotImplementedError(f"Erosion for {dim} with {dim_obj._connectivity_type!r} connectivity")
     ax = ndvar.get_axis(dim)
     struct = np.zeros((3,) * ndvar.ndim, bool)
     index = tuple(slice(None) if i == ax else 1 for i in range(ndvar.ndim))

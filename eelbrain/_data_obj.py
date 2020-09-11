@@ -9489,18 +9489,14 @@ class SourceSpaceBase(Dimension):
 
     def _distances(self):
         "Surface distances between source space vertices"
+        # don't cache for memory reason (4687 -> 168 MB)
         dist = -np.ones((self._n_vert, self._n_vert))
         sss = self.get_source_space()
         i0 = 0
         for vertices, ss in zip(self.vertices, sss):
             if ss['dist'] is None:
                 path = self._sss_path()
-                raise RuntimeError(
-                    f"Source space does not contain source distance "
-                    f"information. To add distance information, run:\n"
-                    f"src = mne.read_source_spaces({path!r})\n"
-                    f"mne.add_source_space_distances(src)\n"
-                    f"src.save({path!r}, overwrite=True)")
+                raise RuntimeError(f"Source space does not contain source distance information. To add distance information, run:\nsrc = mne.read_source_spaces({path!r})\nmne.add_source_space_distances(src)\nsrc.save({path!r}, overwrite=True)")
             i = i0 + len(vertices)
             dist[i0:i, i0:i] = ss['dist'][vertices, vertices[:, None]].toarray()
             i0 = i
