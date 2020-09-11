@@ -7723,7 +7723,7 @@ class Dimension:
         index_to_arg = self._array_index_to(dim)
         return index_to_arg[arg.x]
 
-    def _array_index_for_slice(self, start=None, stop=None, step=None):
+    def _array_index_for_slice(self, start, stop=None, step=None):
         if step is not None and not isinstance(step, Integral):
             raise TypeError("Slice index step for %s must be int, not %r" %
                             (self._dimname(), step))
@@ -10326,9 +10326,12 @@ class UTS(Dimension):
         start = 0 if index.start is None else index.start
         if start < 0:
             start += self.nsamples
-        stop = self.nsamples if index.stop is None else index.stop
-        if stop < 0:
-            stop += self.nsamples
+        if index.stop is None:
+            stop = self.nsamples
+        elif index.stop < 0:
+            stop = index.stop + self.nsamples
+        else:
+            stop = min(index.stop, self.nsamples)
 
         tmin = self.times[start]
         nsamples = stop - start
@@ -10456,13 +10459,12 @@ class UTS(Dimension):
 
         if stop is None:
             stop_ = None
-        elif stop - self.tstop > self._tol:
-            raise ValueError("Time index slice out of range: stop=%s" % stop)
         else:
             stop_float = (stop - self.tmin) / self.tstep
             stop_ = int(stop_float)
             if stop_float - stop_ > 0.000001:
                 stop_ += 1
+            # stop_ = min(stop_, self.nsamples)
 
         if step is None:
             step_ = None

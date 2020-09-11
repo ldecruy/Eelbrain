@@ -657,16 +657,21 @@ def test_dim_uts():
     uts = UTS(-0.1, 0.005, 301)
 
     # basic indexing
-    assert uts._array_index(-0.101) == 0
     assert uts._array_index(-0.1) == 0
-    assert uts._array_index(-0.099) == 0
     assert uts._array_index(0) == 20
     assert uts._array_index(1.4) == 300
     assert uts._array_index(1.405) == 301
     with pytest.raises(ValueError):
         uts._array_index(-.15)
 
+    assert uts._array_index(slice(0, 1.4)) == slice(20, 300)
+    assert uts._array_index(slice(0, 1.5)) == slice(20, 320)
+    with pytest.raises(IndexError):
+        uts._array_index(slice(-1, 0))
+
     # make sure indexing rounds correctly for floats
+    assert uts._array_index(-0.101) == 0
+    assert uts._array_index(-0.099) == 0
     for i, s in enumerate(np.arange(0, 1.4, 0.05)):
         idx = uts._array_index((-0.1 + s, s))
         assert idx.start == 10 * i
@@ -1226,8 +1231,7 @@ def test_ndvar_indexing():
     assert_dataobj_equal(x_tc[x_time_sub], x_tc.sub(time=(0.3, None)))
 
     # out of range index
-    with pytest.raises(ValueError):
-        x.sub(time=(0.1, 0.81))
+    assert_dataobj_equal(x.sub(time=(0.1, 0.81)), x.sub(time=(0.1, 0.91)))
     with pytest.raises(IndexError):
         x.sub(time=(-0.25, 0.1))
 
