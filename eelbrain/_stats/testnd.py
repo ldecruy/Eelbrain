@@ -36,7 +36,7 @@ from typing import Union
 import numpy as np
 import scipy.stats
 from scipy import ndimage
-from tqdm import trange
+from tqdm.auto import trange
 
 from .. import fmtxt, _info, _text
 from ..fmtxt import FMText

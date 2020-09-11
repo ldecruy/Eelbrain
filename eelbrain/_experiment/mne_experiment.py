@@ -18,7 +18,7 @@ from typing import Union
 import warnings
 
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 import mne
 from mne.baseline import rescale
 from mne.minimum_norm import make_inverse_operator, apply_inverse, apply_inverse_epochs

@@ -28,7 +28,7 @@ from typing import Any, Union, Tuple, Sequence
 import warnings
 
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from .._config import CONFIG, mpc
 from .._data_obj import Dataset, NDVar, NDVarArg, dataobj_repr

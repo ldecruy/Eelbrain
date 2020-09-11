@@ -13,7 +13,7 @@ from time import localtime, strftime
 import traceback
 
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from .. import fmtxt
 from .._config import CONFIG
