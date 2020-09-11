@@ -5046,14 +5046,12 @@ class NDVar(Named):
         for i, arg in enumerate(args):
             if isinstance(arg, NDVar):
                 if arg.has_case:
-                    raise ValueError("NDVar with case dimension can not serve"
-                                     "as NDVar index")
+                    raise ValueError("NDVar with case dimension can not serve as NDVar index")
                 dimax = self.get_axis(arg.dims[0].name)
                 if index_args[dimax] is None:
                     index_args[dimax] = arg
                 else:
-                    raise IndexError("Index for %s dimension specified twice."
-                                     % arg.dims[0].name)
+                    raise IndexError(f"Index for {arg.dims[0].name} dimension specified twice.")
             elif arg is newaxis:
                 if i > 0:
                     raise IndexError("newaxis must be in first index position")
@@ -7700,9 +7698,7 @@ class Dimension:
             return arg
         elif isinstance(arg, tuple):
             if len(arg) > 3:
-                raise ValueError("Tuple indexes signify intervals and need to "
-                                 "be of length 1, 2 or 3 (got %r for %s)" %
-                                 (arg, self._dimname()))
+                raise IndexError(f"{arg!r}: tuple indexes signify intervals and need to be of length 1, 2 or 3")
             return self._array_index_for_slice(*arg)
         elif isinstance(arg, list):
             if len(arg) == 0:
@@ -10337,7 +10333,7 @@ class UTS(Dimension):
         tmin = self.times[start]
         nsamples = stop - start
         if nsamples < 0:
-            raise IndexError("Time index out of range: %s." % repr(index))
+            raise IndexError(f"{index!r}: Time index out of range")
 
         if index.step is None or index.step == 1:
             tstep = self.tstep
@@ -10451,7 +10447,7 @@ class UTS(Dimension):
         if start is None:
             start_ = None
         elif start <= self.tmin - self.tstep:
-            raise IndexError("Time index slice out of range: start=%s" % start)
+            raise IndexError(f"{start}: out of range ({self.tmin}, {self.tmax})")
         else:
             start_float = (start - self.tmin) / self.tstep
             start_ = int(start_float)
@@ -10474,9 +10470,7 @@ class UTS(Dimension):
             step_float = step / self.tstep
             step_ = int(round(step_float))
             if step_ != round(step_float, 4):
-                raise ValueError("Time index slice step needs to be a multiple "
-                                 "of the data time step (%s), got %s" %
-                                 (self.tstep, step))
+                raise ValueError(f"Time step {step}: needs to be a multiple of the data time step ({self.tstep})")
 
         return slice(start_, stop_, step_)
 
