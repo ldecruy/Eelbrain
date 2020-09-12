@@ -101,6 +101,7 @@ from .._celltable import Celltable
 from .._colorspaces import LocatedColormap, symmetric_cmaps, zerobased_cmaps, ALPHA_CMAPS
 from .._config import CONFIG
 from .._data_obj import Dimension, Dataset, Factor, Interaction, NDVar, Case, UTS, NDVarArg, CategorialArg, IndexArg, CellArg, ascategorial, asndvar, assub, isnumeric, isdataobject, combine_cells, cellname
+from .._utils.notebooks import use_inline_backend
 from .._stats import testnd
 from .._utils import IS_WINDOWS, LazyProperty, intervals, ui
 from .._ndvar import erode, resample
@@ -108,7 +109,6 @@ from .._text import enumeration, ms
 from ..fmtxt import FMTextArg, Image, asfmtext_or_none
 from ..mne_fixes import MNE_EPOCHS
 from ._styles import Style, find_cell_styles
-from ._utils.notebooks import use_inline_backend
 from ._utils import adjust_hsv
 
 
