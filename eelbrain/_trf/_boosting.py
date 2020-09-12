@@ -34,7 +34,7 @@ from .._data_obj import Dataset, NDVar, NDVarArg, dataobj_repr
 from .._exceptions import OldVersionError
 from .._ndvar import convolve_jit
 from .._utils import LazyProperty, PickleableDataClass, user_activity
-from .._utils.notebooks.tqdm import tqdm
+from .._utils.notebooks import tqdm
 from ._boosting_opt import l1, l2, generate_options, update_error
 from .shared import RevCorrData, Split, Splits, merge_segments
 from ._fit_metrics import get_evaluators

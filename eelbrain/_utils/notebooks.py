@@ -2,7 +2,7 @@
 import matplotlib
 import sys
 
-import tqdm
+from tqdm import tqdm, trange
 
 
 def use_inline_backend():
@@ -22,4 +22,4 @@ if use_inline_backend():
     except ImportError:
         pass
     else:
-        import tqdm.auto as tqdm
+        from tqdm.auto import tqdm, trange

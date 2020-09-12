@@ -47,7 +47,7 @@ from .._stats.testnd import _MergedTemporalClusterDist
 from .._text import enumeration, plural
 from .._utils import IS_WINDOWS, ask, intervals, subp, keydefaultdict, log_level, ScreenHandler
 from .._utils.mne_utils import fix_annot_names, is_fake_mri
-from .._utils.notebooks.tqdm import tqdm
+from .._utils.notebooks import tqdm
 from .definitions import FieldCode, find_dependent_epochs, find_epochs_vars, log_dict_change, log_list_change
 from .epochs import ContinuousEpoch, PrimaryEpoch, SecondaryEpoch, SuperEpoch, EpochCollection, assemble_epochs, decim_param
 from .exceptions import FileDeficient, FileMissing
