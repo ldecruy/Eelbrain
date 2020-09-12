@@ -36,7 +36,6 @@ from typing import Union
 import numpy as np
 import scipy.stats
 from scipy import ndimage
-from tqdm.auto import trange
 
 from .. import fmtxt, _info, _text
 from ..fmtxt import FMText
@@ -51,6 +50,7 @@ from .._data_obj import (
 from .._exceptions import OldVersionError, WrongDimension, ZeroVariance
 from .._utils import LazyProperty, user_activity, restore_main_spec
 from .._utils.numpy_utils import FULL_AXIS_SLICE
+from .._utils.notebooks.tqdm import trange
 from . import opt, stats, vector
 from .connectivity import Connectivity, find_peaks
 from .connectivity_opt import merge_labels, tfce_increment

@@ -13,13 +13,13 @@ from time import localtime, strftime
 import traceback
 
 import numpy as np
-from tqdm.auto import tqdm
 
 from .. import fmtxt
 from .._config import CONFIG
 from .._text import enumeration, n_of, plural
 from .._utils import as_sequence, LazyProperty, ask
 from .._utils.com import Notifier, NotNotifier
+from .._utils.notebooks.tqdm import tqdm
 from .definitions import check_names, compound
 
 

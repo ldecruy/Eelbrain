@@ -85,7 +85,6 @@ import math
 from numbers import Number
 import os
 import re
-import sys
 import time
 from typing import Any, Callable, Dict, Iterator, List, Sequence, Tuple, Union
 import weakref
@@ -109,6 +108,7 @@ from .._text import enumeration, ms
 from ..fmtxt import FMTextArg, Image, asfmtext_or_none
 from ..mne_fixes import MNE_EPOCHS
 from ._styles import Style, find_cell_styles
+from ._utils.notebooks import use_inline_backend
 from ._utils import adjust_hsv
 
 
@@ -190,15 +190,6 @@ del INITIAL_RC['backend']
 def reset_rc():
     "Reset matplotlib rc-parameters to state at Eelbrain initialization"
     mpl.rcParams.update(INITIAL_RC)
-
-
-def use_inline_backend():
-    "Check whether matplotlib is using an inline backend, e.g. for notebooks"
-    # mpl.get_backend() sets backend and imports pyplot; avoid that unless
-    # pyplot has already been imported
-    if 'matplotlib.pyplot' in sys.modules:
-        backend = mpl.get_backend()
-        return backend.endswith('inline') or backend == 'nbAgg'
 
 
 class AxisScale:

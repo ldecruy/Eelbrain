@@ -28,13 +28,13 @@ from typing import Any, Union, Tuple, Sequence
 import warnings
 
 import numpy as np
-from tqdm.auto import tqdm
 
 from .._config import CONFIG, mpc
 from .._data_obj import Dataset, NDVar, NDVarArg, dataobj_repr
 from .._exceptions import OldVersionError
 from .._ndvar import convolve_jit
 from .._utils import LazyProperty, PickleableDataClass, user_activity
+from .._utils.notebooks.tqdm import tqdm
 from ._boosting_opt import l1, l2, generate_options, update_error
 from .shared import RevCorrData, Split, Splits, merge_segments
 from ._fit_metrics import get_evaluators

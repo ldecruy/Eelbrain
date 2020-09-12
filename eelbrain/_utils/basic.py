@@ -7,7 +7,7 @@ import logging
 import re
 from warnings import warn
 
-from tqdm.auto import tqdm
+from .notebooks.tqdm import tqdm
 
 
 LOG_LEVELS = {'DEBUG': logging.DEBUG, 'INFO': logging.INFO,
